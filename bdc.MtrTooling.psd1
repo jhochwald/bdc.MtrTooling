@@ -3,7 +3,7 @@
 	RootModule				  = 'bdc.MtrTooling.psm1'
 	
 	# Version number of this module.
-	ModuleVersion			  = '1.0.0.4'
+	ModuleVersion			  = '1.0.0.5'
 	
 	# ID used to uniquely identify this module
 	GUID						  = 'f1bd1c6a-5e6d-43de-b459-831cd6eb4160'
@@ -68,7 +68,8 @@
 		'Get-MtrAudioDeviceInformation',
 		'Get-MtrDisplayDeviceInformation',
 		'Get-MtrAppStatus',
-		'Get-MtrSystemInfo'
+		'Get-MtrSystemInfo',
+		'Confirm-MtrDirectoryStructure'
 	) #For performance, list functions explicitly
 	
 	# Cmdlets to export from this module

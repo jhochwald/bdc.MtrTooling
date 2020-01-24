@@ -129,12 +129,12 @@
 
          Generate a  Microsoft Teams Room (MTR) System configuration file with configured user information (Accounts)
 
-			.LINK
-			http://hochwald.net
+         .LINK
+         http://hochwald.net
 	
          .NOTES
          Initial MTR function
-			The dynmic parameters still need some tweaks!
+         The dynmic parameters still need some tweaks!
    #>
 	[CmdletBinding(DefaultParameterSetName = 'Devices',
 						ConfirmImpact = 'None',
@@ -923,7 +923,7 @@
 		}
 		else
 		{
-			Write-Verbose 'Nothing to do!!!'
+			Write-Verbose -Message 'Nothing to do!!!'
 		}
 	}
 }
@@ -1003,7 +1003,7 @@ function New-MtrWallpaper
          .LINK
          https://www.bing.com/images/search?q=wallpaper+3840x1080&qpvt=wallpaper+3840x1080&form=IGRE&first=1&cw=1680&ch=939
    #>
-
+	
 	[CmdletBinding(ConfirmImpact = 'None',
 						SupportsShouldProcess)]
 	param
@@ -1037,7 +1037,7 @@ function New-MtrWallpaper
 		[int]
 		$BlueComponent = 100
 	)
-
+	
 	begin
 	{
 		#region Defaults
@@ -1045,26 +1045,26 @@ function New-MtrWallpaper
 		$CNT = 'Continue'
 		$SCT = 'SilentlyContinue'
 		#endregion Defaults
-
+		
 		#region Helpers
-
+		
 		#endregion Helpers
-
+		
 		#region Check
 		try
 		{
 			# Cleanup
 			$AllWallpapers = $null
-
+			
 			# Get a list of all of the wallpapers to choose from. Wallpaper images MUST be exactly 3840x1080, regardless if the MTR is a single or dual screen system.
 			$paramGetChildItem = @{
-  Path        = ($Path + '\Wallpapers')
-  ErrorAction = $STP
-}
+				Path		   = ($Path + '\Wallpapers')
+				ErrorAction = $STP
+			}
 			$AllWallpapers = (Get-ChildItem @paramGetChildItem | Where-Object -FilterScript {
-$_.Extension -in '.jpg', '.jpeg', '.png', '.bmp'
-} | Select-Object -Property Name, Extension)
-
+					$_.Extension -in '.jpg', '.jpeg', '.png', '.bmp'
+				} | Select-Object -Property Name, Extension)
+			
 			# Prevent any futher action if there are no files (wallpapers)
 			if (-not ($AllWallpapers))
 			{
@@ -1076,15 +1076,15 @@ $_.Extension -in '.jpg', '.jpeg', '.png', '.bmp'
 		{
 			# Create the String, just for the error message
 			[string]$NewWallpaperPath = ($Path + '\Wallpapers')
-
+			
 			Write-Error -Message ('No wallpapers where found in {0}' -f $NewWallpaperPath) -Exception 'No wallpapers where found' -Category ObjectNotFound -RecommendedAction 'Check given path' -ErrorAction $STP
-
+			
 			# Just in case
 			exit 1
 		}
 		#endregion Check
 	}
-
+	
 	process
 	{
 		# Files to remove
@@ -1095,51 +1095,51 @@ $_.Extension -in '.jpg', '.jpeg', '.png', '.bmp'
 			'wallpaper.bmp'
 			'SkypeSettings.xml'
 		)
-
+		
 		# Default parameters
 		$paramRemoveItem = @{
-  Force         = $true
-  Confirm       = $false
-  ErrorAction   = $SCT
-  WarningAction = $SCT
-}
-
+			Force		     = $true
+			Confirm		  = $false
+			ErrorAction   = $SCT
+			WarningAction = $SCT
+		}
+		
 		#region CleanupLoop
 		foreach ($item in $FileToCleanup)
 		{
 			# Build the String
 			$CleanupPath = ($Path + '\' + $item)
-
+			
 			# Check if the file exists
 			if (Get-Item -Path $CleanupPath -ErrorAction $SCT)
 			{
 				# Add the parameter
 				$paramRemoveItem.Path = $CleanupPath
-
+				
 				# Remove the File
 				$null = (Remove-Item @paramRemoveItem)
 			}
-
+			
 			# Cleanup
 			$paramRemoveItem.Path = $null
 			$CleanupPath = $null
 		}
 		#endregion CleanupLoop
-
+		
       <#
             Pick a random wallpaper
             Keep in mind that the fewer images to choose from,
             the higher the potential to choose the same image that was used last time.
       #>
 		$NewWallpaper = (Get-Random -InputObject $AllWallpapers)
-
+		
 		#region NewWallpaper
 		if ($NewWallpaper)
 		{
 			# New Variables to support all extensions
 			$NewWallpaperName = $NewWallpaper.Name
 			$NewWallpaperFilename = ('wallpaper' + $NewWallpaper.Extension)
-
+			
 			if ($Check)
 			{
 				if (Get-Command -Name 'Test-MtrWallpaper')
@@ -1147,7 +1147,7 @@ $_.Extension -in '.jpg', '.jpeg', '.png', '.bmp'
 					if (-not (Test-MtrWallpaper -Path ($Path + '\Wallpapers\' + $NewWallpaperName)))
 					{
 						Write-Error -Message ('Sorry, but {0} is not in the required resultion!' -f $NewWallpaperName) -Exception 'Wrong resulution' -Category InvalidData -RecommendedAction 'Check resulution' -ErrorAction $STP
-
+						
 						# Just in case
 						exit 1
 					}
@@ -1155,58 +1155,58 @@ $_.Extension -in '.jpg', '.jpeg', '.png', '.bmp'
 				else
 				{
 					Write-Warning -Message 'Check parameter is given, but the Test-MtrWallpaper is not availible' -ErrorAction Stop -WarningAction Stop
-
+					
 					# Just in case
 					exit 1
 				}
 			}
-
+			
 			Write-Verbose -Message ('Chosen wallpaper is ' + $Path + '\Wallpapers\' + $NewWallpaperName)
-
+			
 			# Copy the chosen wallpaper to the right folder. We rename it to a generic name as a safeguard against improper characters or file names that are too long.
 			$paramCopyItem = @{
-  Path          = ($Path + '\Wallpapers\' + $NewWallpaperName)
-  Destination   = ($Path + '\' + $NewWallpaperFilename)
-  Force         = $true
-  Confirm       = $false
-  ErrorAction   = $CNT
-  WarningAction = $CNT
-}
+				Path			  = ($Path + '\Wallpapers\' + $NewWallpaperName)
+				Destination   = ($Path + '\' + $NewWallpaperFilename)
+				Force		     = $true
+				Confirm		  = $false
+				ErrorAction   = $CNT
+				WarningAction = $CNT
+			}
 			$null = (Copy-Item @paramCopyItem)
-
+			
 			$paramNewObject = @{
-  TypeName     = 'System.XMl.XmlTextWriter'
-  ArgumentList = (($Path + '\SkypeSettings.xml'), $null)
-}
+				TypeName	    = 'System.XMl.XmlTextWriter'
+				ArgumentList = (($Path + '\SkypeSettings.xml'), $null)
+			}
 			$xmlWriter = (New-Object @paramNewObject)
-
+			
 			$xmlWriter.Formatting = 'Indented'
 			$xmlWriter.Indentation = 1
 			$xmlWriter.IndentChar = "`t"
-
+			
 			$xmlWriter.WriteStartDocument()
 			$xmlWriter.WriteStartElement('SkypeSettings')
-
+			
 			# Theming starts here
 			$xmlWriter.WriteStartElement('Theming')
 			$xmlWriter.WriteElementString('ThemeName', 'Custom')
 			$xmlWriter.WriteElementString('CustomThemeImageUrl', $NewWallpaperFilename)
 			$xmlWriter.WriteStartElement('CustomThemeColor')
-
+			
 			# Review the Color Settings!
 			$xmlWriter.WriteElementString('RedComponent', $RedComponent)
 			$xmlWriter.WriteElementString('GreenComponent', $GreenComponent)
 			$xmlWriter.WriteElementString('BlueComponent', $BlueComponent)
-
+			
 			# Close CustomThemeColor
 			$xmlWriter.WriteEndElement()
-
+			
 			# Close Theming
 			$xmlWriter.WriteEndElement()
-
+			
 			# Close SkypeSettings
 			$xmlWriter.WriteEndElement()
-
+			
 			# Save the XML
 			$xmlWriter.WriteEndDocument()
 			$xmlWriter.Flush()
@@ -1214,7 +1214,7 @@ $_.Extension -in '.jpg', '.jpeg', '.png', '.bmp'
 		}
 		#endregion NewWallpaper
 	}
-
+	
 	end
 	{
 		Write-Verbose -Message ('The new wallpaper is {0}' -f $NewWallpaper)
@@ -1265,32 +1265,32 @@ function Test-MtrWallpaper
 		[string]
 		$Path
 	)
-
+	
 	begin
 	{
 		# Cleanup
 		$Check = $null
-
+		
 		# Load the Assembly
 		$null = (Add-Type -AssemblyName System.Drawing)
 	}
-
+	
 	process
 	{
 		# Create the new variable with the Image (Assembly needed)
 		$image = [Drawing.Image]::FromFile($Path)
-
+		
 		# Do the check
 		if (($image.Width -eq '3840') -and ($image.Height -eq '1080'))
 		{
-[bool]$Check = $true
-}
+			[bool]$Check = $true
+		}
 		else
 		{
-[bool]$Check = $false
-}
+			[bool]$Check = $false
+		}
 	}
-
+	
 	end
 	{
 		return $Check
@@ -1319,8 +1319,8 @@ function Get-MtrVideoDeviceInformation
          .EXAMPLE
          PS C:\> Get-MtrVideoDeviceInformation -Computer 'RanierConf'
 	
-			.LINK
-			https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
+         .LINK
+         https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
 	
          .NOTES
          Initial Version
@@ -1389,8 +1389,8 @@ function Get-MtrAudioDeviceInformation
          .EXAMPLE
          PS C:\> Get-MtrAudioDeviceInformation -Computer 'RanierConf'
 	
-			.LINK
-			https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
+         .LINK
+         https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
 	
          .NOTES
          Initial Version
@@ -1445,8 +1445,8 @@ function Get-MtrDisplayDeviceInformation
          .EXAMPLE
          PS C:\> Get-MtrDisplayDeviceInformation -Computer 'RanierConf'
 	
-			.LINK
-			https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
+         .LINK
+         https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
 	
          .NOTES
          Initial Version
@@ -1501,8 +1501,8 @@ function Get-MtrAppStatus
          .EXAMPLE
          PS C:\> Get-MtrAppStatus -Computer 'RanierConf'
 	
-			.LINK
-			https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
+         .LINK
+         https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
 	
          .NOTES
          Initial Version
@@ -1579,8 +1579,8 @@ function Get-MtrSystemInfo
          .EXAMPLE
          PS C:\> Get-MtrSystemInfo -Computer 'RanierConf'
 	
-			.LINK
-			https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
+         .LINK
+         https://docs.microsoft.com/en-us/MicrosoftTeams/rooms/rooms-operations
 	
          .NOTES
          Initial Version, need some care for the return (output)
@@ -1615,5 +1615,50 @@ function Get-MtrSystemInfo
 	end
 	{
 		$deviceInfo
+	}
+}
+
+function Confirm-MtrDirectoryStructure
+{
+   <#
+         .SYNOPSIS
+         Create the Wallpapers folder within the MTR local state directory
+	
+         .DESCRIPTION
+         Create the Wallpapers folder within the MTR local state directory
+	
+         .EXAMPLE
+         PS C:\> Confirm-MtrDirectoryStructure
+	
+         Create the Wallpapers folder within the MTR local state directory
+	
+         .NOTES
+         Initial Version
+   #>
+	[CmdletBinding(ConfirmImpact = 'None')]
+	param ()
+	
+	# Check if the local user exists. MTR still use the user SKYPE!
+	if (Get-LocalUser -Name Skype -ErrorAction SilentlyContinue)
+	{
+		# Set the Directory Variable
+		$TargetDirectory = "$env:HOMEDRIVE\Users\Skype\AppData\Local\Packages\Microsoft.SkypeRoomSystem_8wekyb3d8bbwe\LocalState\Wallpapers"
+		
+		# Does the directory exist?
+		if (-not (Test-Path -Path $TargetDirectory -ErrorAction SilentlyContinue))
+		{
+			$null = (New-Item -ItemType Directory -Force -Path $TargetDirectory -Confirm:$false -ErrorAction Stop)
+		}
+		else
+		{
+			Write-Output -InputObject 'The Wallpapers folder exists in the MTR local state directory.'
+		}
+	}
+	else
+	{
+		Write-Warning -Message 'The local user SKYPE does not exist! Is this an Microsoft Teams Room Device?' -WarningAction Stop
+		
+		# Just in case
+		exit 1
 	}
 }
