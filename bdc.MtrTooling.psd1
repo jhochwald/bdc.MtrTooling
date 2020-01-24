@@ -3,7 +3,7 @@
 	RootModule				  = 'bdc.MtrTooling.psm1'
 	
 	# Version number of this module.
-	ModuleVersion			  = '1.0.0.2'
+	ModuleVersion			  = '1.0.0.3'
 	
 	# ID used to uniquely identify this module
 	GUID						  = 'f1bd1c6a-5e6d-43de-b459-831cd6eb4160'
@@ -63,7 +63,12 @@
 	FunctionsToExport	     = @(
 		'New-MtrConfigrationFile',
 		'New-MtrWallpaper',
-		'Test-MtrWallpaper'
+		'Test-MtrWallpaper',
+		'Get-MtrVideoDeviceInformation',
+		'Get-MtrAudioDeviceInformation',
+		'Get-MtrDisplayDeviceInformation',
+		'Get-MtrAppStatus',
+		'Get-MtrSystemInfo'
 	) #For performance, list functions explicitly
 	
 	# Cmdlets to export from this module
