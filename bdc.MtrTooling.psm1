@@ -1190,7 +1190,7 @@ function New-MtrWallpaper
 			# Theming starts here
 			$xmlWriter.WriteStartElement('Theming')
 			$xmlWriter.WriteElementString('ThemeName', 'Custom')
-			$xmlWriter.WriteElementString('CustomThemeImageUrl', $NewWallpaperFilename)
+			$xmlWriter.WriteElementString('CustomThemeImageUrl', ($Path + '\' + $NewWallpaperFilename))
 			$xmlWriter.WriteStartElement('CustomThemeColor')
 			
 			# Review the Color Settings!

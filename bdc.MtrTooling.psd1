@@ -3,7 +3,7 @@
 	RootModule				  = 'bdc.MtrTooling.psm1'
 	
 	# Version number of this module.
-	ModuleVersion			  = '1.0.0.5'
+	ModuleVersion			  = '1.0.0.6'
 	
 	# ID used to uniquely identify this module
 	GUID						  = 'f1bd1c6a-5e6d-43de-b459-831cd6eb4160'
