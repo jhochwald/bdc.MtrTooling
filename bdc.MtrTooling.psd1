@@ -3,7 +3,7 @@
 	RootModule				  = 'bdc.MtrTooling.psm1'
 	
 	# Version number of this module.
-	ModuleVersion			  = '1.0.0.6'
+	ModuleVersion			  = '1.0.1.0'
 	
 	# ID used to uniquely identify this module
 	GUID						  = 'f1bd1c6a-5e6d-43de-b459-831cd6eb4160'
@@ -69,7 +69,8 @@
 		'Get-MtrDisplayDeviceInformation',
 		'Get-MtrAppStatus',
 		'Get-MtrSystemInfo',
-		'Confirm-MtrDirectoryStructure'
+		'Confirm-MtrDirectoryStructure',
+		'Invoke-mtrDisableModernAuthentication'
 	) #For performance, list functions explicitly
 	
 	# Cmdlets to export from this module
@@ -97,13 +98,13 @@
 		PSData = @{
 			
 			# Tags applied to this module. These help with module discovery in online galleries.
-			# Tags = @()
+			Tags = @('powershell','powershell-module','microsoft-teams')
 			
 			# A URL to the license for this module.
-			# LicenseUri = ''
+			LicenseUri = 'https://github.com/jhochwald/bdc.MtrTooling/blob/master/LICENSE'
 			
 			# A URL to the main website for this project.
-			# ProjectUri = ''
+			ProjectUri = 'https://github.com/jhochwald/bdc.MtrTooling'
 			
 			# A URL to an icon representing this module.
 			# IconUri = ''
